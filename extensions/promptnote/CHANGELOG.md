@@ -1,6 +1,6 @@
 # PromptNote Changelog
 
-## [Initial Release] - 2026-02-14
+## [Initial Release] - {PR_MERGE_DATE}
 
 ### Added
 
