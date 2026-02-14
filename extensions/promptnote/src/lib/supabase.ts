@@ -53,11 +53,7 @@ export async function storeTokens(tokens: OAuth.TokenResponse): Promise<void> {
  * Clear stored tokens (logout)
  */
 export async function clearTokens(): Promise<void> {
-  await client.setTokens({
-    access_token: "",
-    refresh_token: "",
-    expires_in: 0,
-  });
+  await client.removeTokens();
 }
 
 /**

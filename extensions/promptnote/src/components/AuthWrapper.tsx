@@ -11,12 +11,10 @@ import { useState, useEffect } from "react";
 import {
   isAuthenticated,
   loginWithEmail,
-  loginWithGitHub,
-  loginWithGoogle,
   logout,
   ensureAuthenticated,
 } from "../lib/supabase";
-import { CREATE_ACCOUNT_URL } from "../lib/config";
+import { CREATE_ACCOUNT_URL, WEB_APP_URL } from "../lib/config";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -56,48 +54,6 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
       setIsLoggedIn(false);
     } finally {
       setIsChecking(false);
-    }
-  };
-
-  const handleGitHubLogin = async () => {
-    try {
-      await showToast({
-        style: Toast.Style.Animated,
-        title: "Opening GitHub login...",
-      });
-      await loginWithGitHub();
-      await showToast({
-        style: Toast.Style.Success,
-        title: "Complete login in browser",
-        message: "Then restart extension to continue",
-      });
-    } catch (error) {
-      await showToast({
-        style: Toast.Style.Failure,
-        title: "GitHub login failed",
-        message: String(error),
-      });
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      await showToast({
-        style: Toast.Style.Animated,
-        title: "Opening Google login...",
-      });
-      await loginWithGoogle();
-      await showToast({
-        style: Toast.Style.Success,
-        title: "Complete login in browser",
-        message: "Then restart extension to continue",
-      });
-    } catch (error) {
-      await showToast({
-        style: Toast.Style.Failure,
-        title: "Google login failed",
-        message: String(error),
-      });
     }
   };
 
@@ -142,30 +98,15 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
         />
 
         <List.Item
-          title="Log In with GitHub"
-          subtitle="Sign in with your GitHub account"
-          icon={Icon.Code}
+          title="Set Password on Web"
+          subtitle="For Google/GitHub users — set a password to use here"
+          icon={Icon.Key}
           actions={
             <ActionPanel>
-              <Action
-                title="Log in with GitHub"
-                icon={Icon.Code}
-                onAction={handleGitHubLogin}
-              />
-            </ActionPanel>
-          }
-        />
-
-        <List.Item
-          title="Log In with Google"
-          subtitle="Sign in with your Google account"
-          icon={Icon.Globe}
-          actions={
-            <ActionPanel>
-              <Action
-                title="Log in with Google"
-                icon={Icon.Globe}
-                onAction={handleGoogleLogin}
+              <Action.OpenInBrowser
+                title="Set Password on Web"
+                url={`${WEB_APP_URL}/?action=set-password`}
+                icon={Icon.Key}
               />
             </ActionPanel>
           }

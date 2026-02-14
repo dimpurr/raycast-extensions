@@ -94,7 +94,6 @@ export function PinEntryForm({
             <Action
               title="Cancel"
               icon={Icon.XMarkCircle}
-              shortcut={{ modifiers: ["cmd"], key: "w" }}
               onAction={onCancel}
             />
           )}
