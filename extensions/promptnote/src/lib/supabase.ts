@@ -54,9 +54,9 @@ export async function storeTokens(tokens: OAuth.TokenResponse): Promise<void> {
  */
 export async function clearTokens(): Promise<void> {
   await client.setTokens({
-    accessToken: "",
-    refreshToken: "",
-    expiresIn: 0,
+    access_token: "",
+    refresh_token: "",
+    expires_in: 0,
   });
 }
 
@@ -73,8 +73,8 @@ export async function isAuthenticated(): Promise<boolean> {
 /**
  * Get the authorization request for OAuth flow
  */
-export function getAuthorizationRequest(): OAuth.AuthorizationRequest {
-  return client.authorizationRequest({
+export async function getAuthorizationRequest(): Promise<OAuth.AuthorizationRequest> {
+  return await client.authorizationRequest({
     endpoint: `${SUPABASE_URL}/auth/v1/authorize`,
     clientId: "promptnote-raycast",
     scope: "openid profile email",
@@ -89,7 +89,7 @@ export function getAuthorizationRequest(): OAuth.AuthorizationRequest {
  * Opens browser for user to login
  */
 export async function authorize(): Promise<OAuth.TokenSet> {
-  const authRequest = getAuthorizationRequest();
+  const authRequest = await getAuthorizationRequest();
   const { authorizationCode } = await client.authorize(authRequest);
 
   // Exchange authorization code for tokens
@@ -118,8 +118,8 @@ export async function authorize(): Promise<OAuth.TokenSet> {
   // Set the session in Supabase client
   const supabase = getSupabaseClient();
   await supabase.auth.setSession({
-    access_token: tokenResponse.accessToken,
-    refresh_token: tokenResponse.refreshToken || "",
+    access_token: tokenResponse.access_token,
+    refresh_token: tokenResponse.refresh_token || "",
   });
 
   return (await client.getTokens()) as OAuth.TokenSet;
@@ -147,9 +147,9 @@ export async function loginWithEmail(
   if (data.session) {
     // Store tokens for session persistence
     await storeTokens({
-      accessToken: data.session.access_token,
-      refreshToken: data.session.refresh_token,
-      expiresIn: data.session.expires_in || 3600,
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+      expires_in: data.session.expires_in || 3600,
     });
   }
 }
@@ -229,9 +229,9 @@ export async function refreshTokens(): Promise<void> {
 
   if (data.session) {
     await storeTokens({
-      accessToken: data.session.access_token,
-      refreshToken: data.session.refresh_token,
-      expiresIn: data.session.expires_in || 3600,
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+      expires_in: data.session.expires_in || 3600,
     });
   }
 }

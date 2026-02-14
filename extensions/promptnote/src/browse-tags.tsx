@@ -1,3 +1,4 @@
+import React from "react";
 import {
   List,
   ActionPanel,
@@ -93,8 +94,8 @@ function renderTagTree(
   tree: Map<string, TagNode>,
   onSelect: (tag: string) => void,
   depth: number = 0,
-): JSX.Element[] {
-  const items: JSX.Element[] = [];
+): React.ReactNode[] {
+  const items: React.ReactNode[] = [];
 
   tree.forEach((node) => {
     const hasChildren = node.children.size > 0;
